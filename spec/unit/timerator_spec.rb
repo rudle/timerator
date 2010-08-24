@@ -58,4 +58,15 @@ describe Timerator, "each" do
 
     slices.should == [(Time.gm(2000, "jan",1,0,0,0)..Time.gm(2000,"jan",1,1,0,0))]
   end
+
+  it "should run nine times for a range of ten periods" do
+    timerator = Timerator.new(Time.gm(2000, "jan", 1), Time.gm(2000, "jan", 10))
+
+    slices = []
+    timerator.each(:day) do |start_point, end_point|
+      slices << (start_point..end_point)
+    end
+    slices[0].should == (Time.gm(2000, "jan", 1)..Time.gm(2000, "jan", 2))
+    slices.size.should == 9
+  end
 end
