@@ -2,7 +2,6 @@ require File.join(File.expand_path(File.dirname(__FILE__)), '..', 'spec_helper')
 require 'timerator/timerator'
 
 describe Timerator, "slice" do
-
   it "returns 1 second for a 1 second range" do
     timerator = Timerator.new(Time.gm(2000,"jan",1,0,0,0), Time.gm(2000,"jan",1,0,0,1))
 
@@ -46,5 +45,17 @@ describe Timerator, "slice" do
     slices = timerator.slice :hour
     slices[0].should == (Time.gm(2000, "jan", 1,0,0,0)..Time.gm(2000, "jan", 1, 1, 0,0))
   end
+end
 
+describe Timerator, "each" do
+  it "should run once for a range of one period" do
+    timerator = Timerator.new(Time.gm(2000,"jan",1,0,0,0), Time.gm(2000,"jan",1,1,0,0))
+
+    slices = []
+    timerator.each(:hour) do |start_point, end_point|
+      slices << (start_point..end_point)
+    end
+
+    slices.should == [(Time.gm(2000, "jan",1,0,0,0)..Time.gm(2000,"jan",1,1,0,0))]
+  end
 end

@@ -26,6 +26,18 @@ class Timerator
     end
   end
 
+  def each period = :second
+    diff = (@end_date - @start_date) - inclusive_modifier
+
+    diff /= TIME_SPANS[period]
+
+    (0..diff).each do |tick|
+      span_start = @start_date + TIME_SPANS[period] * tick
+      span_end = @start_date + TIME_SPANS[period] * (tick + 1)
+      yield span_start, [span_end,@end_date].min
+    end
+  end
+
   private
 
   def inclusive_modifier
